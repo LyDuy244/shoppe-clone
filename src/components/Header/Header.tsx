@@ -118,6 +118,7 @@ export default function Header() {
             <input
               type='text'
               name='search'
+              placeholder='Free Ship Đơn Từ 0Đ'
               className='text-black px-3 py-2 flex-1 border-none outline-none bg-transparent'
             />
             <button className='rounded-sm py-2 px-6 flex-shrink-0 bg-orange hover:opacity-90'>
