@@ -1,11 +1,37 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import authApi from 'src/api/auth.api'
 import Popover from 'src/components/Popover'
 import path from 'src/constants/path'
 import { AppContext } from 'src/context/app.context'
+import useQueryConfigs from 'src/hooks/useQueryConfigs'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import { omit } from 'lodash'
+import { purchasesStatus } from 'src/constants/purchase'
+import purchasesApi from 'src/api/purchase.api'
+import noproduct from 'src/assets/images/no-product.png'
+import { formatCurrency } from 'src/utils/utils'
+const schema = yup
+  .object({
+    search: yup.string().trim().required()
+  })
+  .required()
+type FormData = yup.InferType<typeof schema>
+
+const MAX_PURCHASES = 5
+
 export default function Header() {
+  const navigate = useNavigate()
+  const queryConfig = useQueryConfigs()
+  const { handleSubmit, register } = useForm<FormData>({
+    defaultValues: {
+      search: ''
+    },
+    resolver: yupResolver(schema)
+  })
   const { isAuthenticated, setIsAuthenticated, setProfile, profile } = useContext(AppContext)
   const logoutMutation = useMutation({
     mutationFn: () => authApi.logout(),
@@ -14,9 +40,25 @@ export default function Header() {
       setProfile(null)
     }
   })
+  const { data: purchasesInCartData } = useQuery({
+    queryKey: ['purchases', { status: purchasesStatus.inCart }],
+    queryFn: () => purchasesApi.getPurchaseList({ status: purchasesStatus.inCart })
+  })
+
+  const purchasesInCart = purchasesInCartData?.data.data
 
   const handleLogout = () => {
     logoutMutation.mutate()
+  }
+
+  const onSubmitSearch = (data: FormData) => {
+    const config = queryConfig.order
+      ? omit({ ...queryConfig, name: data.search }, ['order', 'sort_by'])
+      : { ...queryConfig, name: data.search }
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(config).toString()
+    })
   }
 
   return (
@@ -114,12 +156,12 @@ export default function Header() {
               </g>
             </svg>
           </Link>
-          <form className='bg-white rounded-sm p-1 flex col-span-8'>
+          <form className='bg-white rounded-sm p-1 flex col-span-8' onSubmit={handleSubmit(onSubmitSearch)}>
             <input
               type='text'
-              name='search'
               placeholder='Free Ship Đơn Từ 0Đ'
               className='text-black px-3 py-2 flex-1 border-none outline-none bg-transparent'
+              {...register('search')}
             />
             <button className='rounded-sm py-2 px-6 flex-shrink-0 bg-orange hover:opacity-90'>
               <svg
@@ -142,75 +184,48 @@ export default function Header() {
             <Popover
               renderPopover={
                 <div className='shadow-md bg-white rounded-sm border-t-white border-solid border border-gray-200 max-w-[400px] text-sm'>
-                  <div className='p-2'>
-                    <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
-                    <div className='mt-5'>
-                      <div className='mt-4 flex '>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://down-vn.img.susercontent.com/file/b58d9d4a99a6764467b730ec0853c34f_tn.webp'
-                            alt='anh'
-                            className='w-11 h-11 object-cover'
-                          />
-                        </div>
-                        <div className='flex-grow ml-2 overflow-hidden'>
-                          <div className='truncate'>
-                            Fysoline - Xịt nước muối biển sâu Pháp 100ml - Vệ sinh, giữ ẩm, cân bằng sinh lý niêm mạc
-                            mũi
+                  {purchasesInCart ? (
+                    <div className='p-2'>
+                      <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
+                      <div className='mt-5'>
+                        {purchasesInCart.slice(0, MAX_PURCHASES).map((purchase) => (
+                          <div className='p-2 mt-2 flex hover:bg-gray-100' key={purchase._id}>
+                            <div className='flex-shrink-0'>
+                              <img
+                                src={purchase.product.image}
+                                alt={purchase.product.name}
+                                className='w-11 h-11 object-cover'
+                              />
+                            </div>
+                            <div className='flex-grow ml-2 overflow-hidden'>
+                              <div className='truncate'>{purchase.product.name}</div>
+                            </div>
+                            <div className='ml-2 flex-shrink-0'>
+                              <span className='text-orange'>₫{formatCurrency(purchase.product.price)}</span>
+                            </div>
                           </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫130.000</span>
-                        </div>
+                        ))}
                       </div>
-                      <div className='mt-4 flex '>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://down-vn.img.susercontent.com/file/b58d9d4a99a6764467b730ec0853c34f_tn.webp'
-                            alt='anh'
-                            className='w-11 h-11 object-cover'
-                          />
+                      <div className='flex mt-6 items-center justify-between'>
+                        <div className='capitalize text-xs  text-gray-500'>
+                          {purchasesInCart.length - MAX_PURCHASES > 0 ? purchasesInCart.length - MAX_PURCHASES : ''}{' '}
+                          Thêm vào giỏ hàng
                         </div>
-                        <div className='flex-grow ml-2 overflow-hidden'>
-                          <div className='truncate'>
-                            Fysoline - Xịt nước muối biển sâu Pháp 100ml - Vệ sinh, giữ ẩm, cân bằng sinh lý niêm mạc
-                            mũi
-                          </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫130.000</span>
-                        </div>
-                      </div>
-                      <div className='mt-4 flex '>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://down-vn.img.susercontent.com/file/b58d9d4a99a6764467b730ec0853c34f_tn.webp'
-                            alt='anh'
-                            className='w-11 h-11 object-cover'
-                          />
-                        </div>
-                        <div className='flex-grow ml-2 overflow-hidden'>
-                          <div className='truncate'>
-                            Fysoline - Xịt nước muối biển sâu Pháp 100ml - Vệ sinh, giữ ẩm, cân bằng sinh lý niêm mạc
-                            mũi
-                          </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫130.000</span>
-                        </div>
+                        <button className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm'>
+                          Xem giỏ hàng
+                        </button>
                       </div>
                     </div>
-                    <div className='flex mt-6 items-center justify-between'>
-                      <div className='capitalize text-xs  text-gray-500'>Thêm vào giỏ hàng</div>
-                      <button className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm'>
-                        Xem giỏ hàng
-                      </button>
+                  ) : (
+                    <div className='p-2 w-[300px] h-[300px] flex items-center justify-center'>
+                      <img src={noproduct} alt={'no purchase'} className='w-24 h-24 object-cover' />
+                      <div className='mt-3 capitalize'>Chưa có sản phẩm</div>
                     </div>
-                  </div>
+                  )}
                 </div>
               }
             >
-              <Link to={'/cart'} className=''>
+              <Link to={'/cart'} className='relative'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -225,6 +240,9 @@ export default function Header() {
                     d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z'
                   />
                 </svg>
+                <span className='absolute top-[-5px] left-[16px] rounded-full z-10 px-[7px] py-[2px] bg-white text-orange text-[10px]'>
+                  {purchasesInCart?.length}
+                </span>
               </Link>
             </Popover>
           </div>

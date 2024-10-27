@@ -1,8 +1,7 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
-import path from 'src/constants/path'
+import ProductRating from 'src/components/ProductRating'
 import { Product as ProductType } from 'src/types/product.type'
-import { formatCurrency, formatNumberToSocialStyle } from 'src/utils/utils'
+import { formatCurrency, formatNumberToSocialStyle, generateNameId } from 'src/utils/utils'
 
 interface Props {
   product: ProductType
@@ -10,7 +9,7 @@ interface Props {
 
 export default function Product({ product }: Props) {
   return (
-    <Link to='/'>
+    <Link to={`/${generateNameId({ name: product.name, id: product._id })}`}>
       <div className='bg-white shadow-md rounded-sm hover:translate-y-[-0.03rem] hover:shadow-lg duration-100 transition-transform overflow-hidden'>
         <div className='w-full pt-[100%] relative'>
           <img
@@ -32,17 +31,9 @@ export default function Product({ product }: Props) {
             </div>
           </div>
           <div className='mt-3 flex items-center'>
-            <div className='flex items-center gap-1'>
-              <img
-                src='https://deo.shopeemobile.com/shopee/modules-federation/live/0/shopee__item-card-standard-v2/0.1.36/pc/d7099d3fd1dfdaf705ab.svg'
-                width='10'
-                height='10'
-                alt='rating-star-full'
-              />
-              <span className='text-xs'>{product.rating}</span>
-            </div>
+            <ProductRating rating={product.rating} />
             <div className='ml-2 text-xs'>
-              <span>{formatNumberToSocialStyle(product.sold)}</span>
+              <span>{formatNumberToSocialStyle(product.rating)}</span>
               <span className='ml-1'>Đã bán</span>
             </div>
           </div>

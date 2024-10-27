@@ -4,13 +4,13 @@ import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
 import InputNumber from 'src/components/InputNumber'
 import path from 'src/constants/path'
-import { QueryConfig } from 'src/pages/ProductList/ProductList'
 import { Category } from 'src/types/category.type'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { omit } from 'lodash'
 import { NoUndefinedField } from 'src/types/utils.type'
 import RatingStart from 'src/pages/ProductList/components/RatingStart'
+import { QueryConfig } from 'src/hooks/useQueryConfigs'
 interface Props {
   categories: Category[]
   queryConfig: QueryConfig
@@ -157,7 +157,7 @@ export default function AsideFilter({ categories, queryConfig }: Props) {
               render={({ field }) => (
                 <InputNumber
                   type='text'
-                  className='grow'
+                  className='grow mt-2'
                   classNameInput='p-1 w-full outline-none border border-solid border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                   placeholder='TỪ'
                   classNameError='hidden'
@@ -176,7 +176,7 @@ export default function AsideFilter({ categories, queryConfig }: Props) {
               render={({ field }) => (
                 <InputNumber
                   type='text'
-                  className='grow'
+                  className='grow mt-2'
                   classNameInput='p-1 w-full outline-none border border-solid border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                   placeholder='ĐẾN'
                   classNameError='hidden'
