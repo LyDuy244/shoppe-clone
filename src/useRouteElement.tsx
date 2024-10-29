@@ -1,16 +1,19 @@
-import React, { useContext } from 'react'
+import React, { Profiler, useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import Login from './pages/Login'
 import ProductList from './pages/ProductList'
 import Register from './pages/Register'
 import RegisterLayout from './layouts/RegisterLayout'
 import MainLayout from 'src/layouts/MainLayout'
-import Profile from 'src/components/Profile'
 import { AppContext } from 'src/context/app.context'
 import path from 'src/constants/path'
 import ProductDetail from 'src/pages/ProductDetail'
 import Cart from 'src/pages/Cart'
 import CartLayout from 'src/layouts/CartLayout'
+import UserLayout from 'src/pages/User/Layout'
+import ChangePassword from 'src/pages/User/ChangePassword'
+import HistoryPurchase from 'src/pages/User/HistoryPurchase'
+import Profile from 'src/pages/User/Profile'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -45,20 +48,35 @@ export default function useRouteElement() {
       element: <ProtectedRoute />,
       children: [
         {
-          path: path.profile,
-          element: (
-            <MainLayout>
-              <Profile></Profile>
-            </MainLayout>
-          )
-        },
-        {
           path: path.cart,
           element: (
             <CartLayout>
               <Cart></Cart>
             </CartLayout>
           )
+        },
+        {
+          path: path.user,
+          element: (
+            <MainLayout>
+              <UserLayout></UserLayout>
+            </MainLayout>
+          ),
+
+          children: [
+            {
+              path: path.profile,
+              element: <Profile></Profile>
+            },
+            {
+              path: path.changePassword,
+              element: <ChangePassword></ChangePassword>
+            },
+            {
+              path: path.historyPurchase,
+              element: <HistoryPurchase></HistoryPurchase>
+            },
+          ]
         }
       ]
     },
