@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import InputNumber, { InputNumberProps } from 'src/components/InputNumber'
 
 interface Props extends InputNumberProps {
   max?: number
+  onFocusOut?: (value: number) => void
   onIncrease?: (value: number) => void
   onDecrease?: (value: number) => void
   onType?: (value: number) => void
@@ -11,6 +12,7 @@ interface Props extends InputNumberProps {
 
 export default function QuantityController({
   max,
+  onFocusOut,
   onIncrease,
   onDecrease,
   onType,
@@ -18,6 +20,7 @@ export default function QuantityController({
   classNameWrapper = 'ml-10',
   ...rest
 }: Props) {
+  const [localValue, setLocalValue] = useState(Number(value || 0))
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let _value = Number(e.target.value)
     if (max !== undefined && _value > max) {
@@ -27,23 +30,31 @@ export default function QuantityController({
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     onType && onType(_value)
+    setLocalValue(_value)
   }
 
   const increase = () => {
-    let _value = Number(value) + 1
+    let _value = Number(value || localValue) + 1
     if (max !== undefined && _value > max) {
       _value = max
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     onIncrease && onIncrease(_value)
+    setLocalValue(_value)
   }
   const decrease = () => {
-    let _value = Number(value) - 1
+    let _value = Number(value || localValue) - 1
     if (_value < 1) {
       _value = 1
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     onDecrease && onDecrease(_value)
+    setLocalValue(_value)
+  }
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement, Element>) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    onFocusOut && onFocusOut(Number(e.target.value))
   }
 
   return (
@@ -67,8 +78,9 @@ export default function QuantityController({
         className=''
         classNameError='hidden'
         classNameInput='h-8 w-14 border-t border-b border-solid  border-gray-300 text-center outline-none'
-        value={value}
+        value={value || localValue}
         onChange={handleChange}
+        onBlur={handleBlur}
         {...rest}
       />
       <button
