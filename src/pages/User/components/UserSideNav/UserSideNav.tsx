@@ -1,24 +1,28 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import  { useContext } from 'react'
+import { NavLink } from 'react-router-dom'
 import path from 'src/constants/path'
-
+import { AppContext } from 'src/context/app.context'
+import userImage from 'src/assets/images/user-image.png'
+import { getAvatarUrl } from 'src/utils/utils'
+import classNames from 'classnames'
 export default function UserSideNav() {
+  const { profile } = useContext(AppContext)
   return (
     <div>
       <div className='flex items-center border-b border-solid border-b-gray-200 py-4'>
-        <Link
+        <NavLink
           to={path.profile}
           className='h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-solid border-black/10'
         >
           <img
-            src='https://meatworld.com.vn/wp-content/uploads/c70078d70f4e1277c2c9b9c95ddc83fePVx3j3.jpg'
+            src={profile?.avatar ? getAvatarUrl(profile.avatar) : userImage}
             alt=''
             className='h-full w-full object-cover'
           />
-        </Link>
+        </NavLink>
         <div className='flex-grow pl-4'>
           <div className='mb-1 truncate font-semibold text-gray-600'>Ngoc Duy</div>
-          <Link to={path.profile} className='flex items-center capitalize text-gray-500 text-xs'>
+          <NavLink to={path.profile} className='flex items-center capitalize text-gray-500 text-xs'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -34,11 +38,19 @@ export default function UserSideNav() {
               />
             </svg>
             <span className='ml-1'>Sửa hồ sơ</span>
-          </Link>
+          </NavLink>
         </div>
       </div>
       <div className='mt-7'>
-        <Link to={path.profile} className='flex items-center capitalize text-orange transition-colors'>
+        <NavLink
+          to={path.profile}
+          className={({ isActive }) =>
+            classNames('mt-4 flex items-center capitalize ', {
+              'text-orange': isActive,
+              'text-gray-600': !isActive
+            })
+          }
+        >
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
@@ -54,8 +66,16 @@ export default function UserSideNav() {
             />
           </svg>
           <span className='ml-2'>Tài khoản của tôi</span>
-        </Link>
-        <Link to={path.changePassword} className='mt-4 flex items-center capitalize text-gray-600 transition-colors'>
+        </NavLink>
+        <NavLink
+          to={path.changePassword}
+          className={({ isActive }) =>
+            classNames('mt-4 flex items-center capitalize ', {
+              'text-orange': isActive,
+              'text-gray-600': !isActive
+            })
+          }
+        >
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
@@ -72,8 +92,16 @@ export default function UserSideNav() {
           </svg>
 
           <span className='ml-2'>Đổi mật khẩu</span>
-        </Link>
-        <Link to={path.historyPurchase} className='mt-4 flex items-center capitalize text-gray-600 transition-colors'>
+        </NavLink>
+        <NavLink
+          to={path.historyPurchase}
+          className={({ isActive }) =>
+            classNames('mt-4 flex items-center capitalize ', {
+              'text-orange': isActive,
+              'text-gray-600': !isActive
+            })
+          }
+        >
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
@@ -90,7 +118,7 @@ export default function UserSideNav() {
           </svg>
 
           <span className='ml-2'>Đơn hàng</span>
-        </Link>
+        </NavLink>
       </div>
     </div>
   )

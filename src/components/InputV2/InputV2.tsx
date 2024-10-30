@@ -1,4 +1,4 @@
-import React, { forwardRef, InputHTMLAttributes, useState } from 'react'
+import React, {  InputHTMLAttributes, useState } from 'react'
 import { FieldValues, useController, UseControllerProps, FieldPath } from 'react-hook-form'
 
 export type InputNumberProps<

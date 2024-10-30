@@ -3,7 +3,7 @@ import useQueryConfigs from 'src/hooks/useQueryConfigs'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { createSearchParams, useNavigate } from 'react-router-dom'
-import { omit } from 'lodash'
+import omit from 'lodash/omit'
 import path from 'src/constants/path'
 
 const schema = yup

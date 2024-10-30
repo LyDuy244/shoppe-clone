@@ -1,14 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import authApi from 'src/api/auth.api'
 import Popover from 'src/components/Popover'
 import path from 'src/constants/path'
 import { purchasesStatus } from 'src/constants/purchase'
 import { AppContext } from 'src/context/app.context'
+import userImage from 'src/assets/images/user-image.png'
+import { getAvatarUrl } from 'src/utils/utils'
 
 export default function NavHeader() {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   const { isAuthenticated, profile, setIsAuthenticated, setProfile } = useContext(AppContext)
   const logoutMutation = useMutation({
     mutationFn: () => authApi.logout(),
@@ -86,7 +88,7 @@ export default function NavHeader() {
         >
           <div className='w-6 h-6 mr-2 flex-shrink-0'>
             <img
-              src='https://meatworld.com.vn/wp-content/uploads/c70078d70f4e1277c2c9b9c95ddc83fePVx3j3.jpg'
+              src={profile?.avatar ? getAvatarUrl(profile.avatar) : userImage}
               alt=''
               className='w-full h-full object-cover rounded-full'
             />

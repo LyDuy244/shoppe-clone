@@ -1,5 +1,5 @@
-import { isUndefined, omitBy } from 'lodash'
-import { sortBy } from 'src/constants/product'
+import isUndefined from 'lodash/isUndefined'
+import omitBy from 'lodash/omitBy'
 import useQueryParams from 'src/hooks/useQueryParams'
 import { ProductListConfig } from 'src/types/product.type'
 

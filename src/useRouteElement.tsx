@@ -1,19 +1,22 @@
-import React, { Profiler, useContext } from 'react'
+import { lazy, Suspense, useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-import Login from './pages/Login'
-import ProductList from './pages/ProductList'
-import Register from './pages/Register'
+
 import RegisterLayout from './layouts/RegisterLayout'
 import MainLayout from 'src/layouts/MainLayout'
 import { AppContext } from 'src/context/app.context'
 import path from 'src/constants/path'
-import ProductDetail from 'src/pages/ProductDetail'
-import Cart from 'src/pages/Cart'
 import CartLayout from 'src/layouts/CartLayout'
 import UserLayout from 'src/pages/User/Layout'
-import ChangePassword from 'src/pages/User/ChangePassword'
-import HistoryPurchase from 'src/pages/User/HistoryPurchase'
-import Profile from 'src/pages/User/Profile'
+
+const Login = lazy(() => import('./pages/Login'))
+const ProductList = lazy(() => import('./pages/ProductList'))
+const Register = lazy(() => import('./pages/Register'))
+const ProductDetail = lazy(() => import('./pages/ProductDetail'))
+const Cart = lazy(() => import('./pages/Cart'))
+const ChangePassword = lazy(() => import('./pages/User/ChangePassword'))
+const HistoryPurchase = lazy(() => import('./pages/User/HistoryPurchase'))
+const Profile = lazy(() => import('./pages/User/Profile'))
+const NotFound = lazy(() => import('./pages/Login'))
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -31,7 +34,9 @@ export default function useRouteElement() {
       index: true,
       element: (
         <MainLayout>
-          <ProductList />
+          <Suspense>
+            <ProductList />
+          </Suspense>
         </MainLayout>
       )
     },
@@ -51,7 +56,9 @@ export default function useRouteElement() {
           path: path.cart,
           element: (
             <CartLayout>
-              <Cart></Cart>
+              <Suspense>
+                <Cart></Cart>
+              </Suspense>
             </CartLayout>
           )
         },
@@ -66,16 +73,28 @@ export default function useRouteElement() {
           children: [
             {
               path: path.profile,
-              element: <Profile></Profile>
+              element: (
+                <Suspense>
+                  <Profile></Profile>
+                </Suspense>
+              )
             },
             {
               path: path.changePassword,
-              element: <ChangePassword></ChangePassword>
+              element: (
+                <Suspense>
+                  <ChangePassword></ChangePassword>
+                </Suspense>
+              )
             },
             {
               path: path.historyPurchase,
-              element: <HistoryPurchase></HistoryPurchase>
-            },
+              element: (
+                <Suspense>
+                  <HistoryPurchase></HistoryPurchase>
+                </Suspense>
+              )
+            }
           ]
         }
       ]
@@ -88,7 +107,9 @@ export default function useRouteElement() {
           path: path.login,
           element: (
             <RegisterLayout>
-              <Login />
+              <Suspense>
+                <Login />
+              </Suspense>
             </RegisterLayout>
           )
         },
@@ -96,11 +117,23 @@ export default function useRouteElement() {
           path: path.register,
           element: (
             <RegisterLayout>
-              <Register />
+              <Suspense>
+                <Register />
+              </Suspense>
             </RegisterLayout>
           )
         }
       ]
+    },
+    {
+      path: '*',
+      element: (
+        <MainLayout>
+          <Suspense>
+            <NotFound></NotFound>
+          </Suspense>
+        </MainLayout>
+      )
     }
   ])
 

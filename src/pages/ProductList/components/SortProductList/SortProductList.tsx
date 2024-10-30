@@ -1,6 +1,5 @@
 import classNames from 'classnames'
-import { omit } from 'lodash'
-import React from 'react'
+import omit from 'lodash/omit'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import path from 'src/constants/path'
 import { sortBy, order as orderConstant } from 'src/constants/product'
