@@ -10,6 +10,7 @@ import Input from 'src/components/Input'
 import { useContext } from 'react'
 import { AppContext } from 'src/context/app.context'
 import Button from 'src/components/Button'
+import { Helmet } from 'react-helmet-async'
 
 const schema = yup
   .object({
@@ -69,6 +70,10 @@ const Login = () => {
 
   return (
     <div className='bg-orange'>
+      <Helmet>
+        <title>Đăng nhập | Shoppe Clone</title>
+        <meta name='description' content='Đăng nhập vào dự án shoppe clone' />
+      </Helmet>
       <div className='container'>
         <div className='grid grid-cols-1 lg:grid-cols-5 lg:py-32 lg:pr-10 py-12'>
           <div className='lg:col-span-2 lg:col-start-4'>

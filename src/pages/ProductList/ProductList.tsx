@@ -1,4 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { Helmet } from 'react-helmet-async'
 import categoryApi from 'src/api/category,api'
 import productApi from 'src/api/product.api'
 import Paginate from 'src/components/Paginate'
@@ -23,6 +24,10 @@ const ProductList = () => {
 
   return (
     <div className='bg-gray-200 py-6'>
+      <Helmet>
+        <title>Trang danh sách sản phẩm | Shoppe Clone</title>
+        <meta name='description' content='Trang danh sách sản phẩm của dự án shoppe clone' />
+      </Helmet>
       <div className='container'>
         {productData && (
           <div className='grid grid-cols-12 gap-6'>

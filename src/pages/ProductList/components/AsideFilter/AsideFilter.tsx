@@ -12,6 +12,8 @@ import { NoUndefinedField } from 'src/types/utils.type'
 import RatingStart from 'src/pages/ProductList/components/RatingStart'
 import { QueryConfig } from 'src/hooks/useQueryConfigs'
 import InputV2 from 'src/components/InputV2'
+import { useTranslation } from 'react-i18next'
+
 interface Props {
   categories: Category[]
   queryConfig: QueryConfig
@@ -49,6 +51,7 @@ const schema = yup
 type FormData = NoUndefinedField<yup.InferType<typeof schema>>
 
 export default function AsideFilter({ categories, queryConfig }: Props) {
+  const { t } = useTranslation()
   const { category } = queryConfig
   const {
     control,
@@ -98,7 +101,7 @@ export default function AsideFilter({ categories, queryConfig }: Props) {
             </g>
           </g>
         </svg>
-        Tất cả danh mục
+        {t('aside filter.all categories')}
       </Link>
       <div className='bg-gray-300 h-[1px] my-4'></div>
       <ul>
@@ -145,7 +148,7 @@ export default function AsideFilter({ categories, queryConfig }: Props) {
             ></polyline>
           </g>
         </svg>
-        Bộ lọc tìm kiếm
+        {t('aside filter.filter search')}
       </Link>
       <div className='bg-gray-300 h-[1px] my-4'></div>
       <div className='my-5'>

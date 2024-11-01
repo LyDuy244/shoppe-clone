@@ -5,12 +5,13 @@ import * as yup from 'yup'
 import Input from 'src/components/Input'
 import { useMutation } from '@tanstack/react-query'
 import authApi from 'src/api/auth.api'
-import  omit  from 'lodash/omit'
+import omit from 'lodash/omit'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ErrorResponseApi } from 'src/types/utils.type'
 import { useContext } from 'react'
 import { AppContext } from 'src/context/app.context'
 import Button from 'src/components/Button'
+import { Helmet } from 'react-helmet-async'
 
 const schema = yup
   .object({
@@ -79,6 +80,10 @@ const Register = () => {
   }
   return (
     <div className='bg-orange'>
+      <Helmet>
+        <title>Trang Đăng ký | Shoppe Clone</title>
+        <meta name='description' content='Đăng ký tài khoản của dự án shoppe clone' />
+      </Helmet>
       <div className='container'>
         <div className='grid grid-cols-1 lg:grid-cols-5 lg:py-32 lg:pr-10 py-12'>
           <div className='lg:col-span-2 lg:col-start-4'>

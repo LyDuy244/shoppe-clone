@@ -1,6 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
+import { convert } from 'html-to-text'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import productApi from 'src/api/product.api'
@@ -14,6 +17,7 @@ import { Product as ProductType } from 'src/types/product.type'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from 'src/utils/utils'
 
 export default function ProductDetail() {
+  const { t } = useTranslation(['product'])
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const [buyCount, setBuyCount] = useState(1)
@@ -124,6 +128,17 @@ export default function ProductDetail() {
   if (!product) return null
   return (
     <div className='bg-gray-200 py-6 '>
+      <Helmet>
+        <title>{product.name} | Shoppe Clone</title>
+        <meta
+          name='description'
+          content={convert(product.description, {
+            limits: {
+              maxInputLength: 120
+            }
+          })}
+        />
+      </Helmet>
       <div className='container'>
         <div className='p-4 bg-white shadow-sm'>
           <div className='grid grid-cols-12 gap-9'>
@@ -223,7 +238,9 @@ export default function ProductDetail() {
                   value={buyCount}
                   max={product.quantity}
                 />
-                <div className='ml-6 text-sm text-gray-500'>{product.quantity} sản phẩm có sẵn</div>
+                <div className='ml-6 text-sm text-gray-500'>
+                  {product.quantity} {t('product:available')}
+                </div>
               </div>
               <div className='mt-8 flex items-center'>
                 <button
