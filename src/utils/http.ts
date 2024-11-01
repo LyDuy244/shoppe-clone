@@ -5,7 +5,7 @@ import { AuthResponse, RefreshTokenResponse } from "src/types/auth.type";
 import { ErrorResponseApi } from "src/types/utils.type";
 import { clearLocalStorage, getAccessTokenFromLocalStorage, setAccessTokenToLocalStorage, setProfileToLocalStorage, setRefreshTokenToLocalStorage } from "src/utils/auth";
 import { isAxiosExpiredTokenError, isAxiosUnauthorizedError } from "src/utils/utils";
-class Http {
+export class Http {
   instance: AxiosInstance
   private accessToken: string
   private refreshToken: string
@@ -17,7 +17,7 @@ class Http {
       timeout: 10000,
       headers: {
         "Content-Type": "application/json",
-        'expire-access-token': 60 * 60 * 24, // 1 ngày
+        'expire-access-token': 1, // 1 ngày
         'expire-refresh-token': 60 * 60 * 24 * 160 // 160 ngày
       }
     })
