@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN, URL_REGISTER } from "src/api/auth.api";
 import { AuthResponse, RefreshTokenResponse } from "src/types/auth.type";
 import { ErrorResponseApi } from "src/types/utils.type";
-import { clearLocalStorage, getAccessTokenFromLocalStorage, setAccessTokenToLocalStorage, setProfileToLocalStorage, setRefreshTokenToLocalStorage } from "src/utils/auth";
+import { clearLocalStorage, getAccessTokenFromLocalStorage, getRefreshTokenFromLocalStorage, setAccessTokenToLocalStorage, setProfileToLocalStorage, setRefreshTokenToLocalStorage } from "src/utils/auth";
 import { isAxiosExpiredTokenError, isAxiosUnauthorizedError } from "src/utils/utils";
 export class Http {
   instance: AxiosInstance
@@ -12,6 +12,8 @@ export class Http {
   private refreshTokenRequest: Promise<string> | null
   constructor() {
     this.accessToken = getAccessTokenFromLocalStorage()
+    this.refreshToken = getRefreshTokenFromLocalStorage()
+    this.refreshTokenRequest = null
     this.instance = axios.create({
       baseURL: "https://api-ecom.duthanhduoc.com/",
       timeout: 10000,
