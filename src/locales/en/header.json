@@ -1,0 +1,17 @@
+{
+  "language": {
+    "vn": "Vietnamese",
+    "en": "English"
+  },
+  "account": {
+    "my account": "My Account",
+    "my purchase": "My Purchase",
+    "log out": "Logout"
+  },
+  "cart header": {
+    "no products yet": "No Products Yet",
+    "recently added products": "Recently Added Products",
+    "view my shopping cart": "View My Shopping Cart",
+    "add to cart": "Add to cart"
+  }
+}

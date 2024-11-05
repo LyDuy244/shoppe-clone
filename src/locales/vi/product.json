@@ -1,3 +1,9 @@
 {
-  "available": "Sản phẩm có sẵn"
+  "available": "Sản phẩm có sẵn",
+  "sold": "Đã bán",
+  "quantity": "Số lượng",
+  "add to cart": "Thêm Vào Giỏ Hàng",
+  "buy now": "Mua Ngay",
+  "product specifications": "Mô tả sàn phẩm",
+  "you may also like": "Có thể bạn cũng thích"
 }

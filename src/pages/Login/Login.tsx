@@ -92,6 +92,8 @@ const Login = () => {
                 name='password'
                 errorMessage={errors?.password?.message}
                 placeholder='Password'
+                className='relative'
+                classNameEye='size-5 cursor-pointer absolute top-[12px] right-[8px]'
               ></Input>
               <div className='mt-3'>
                 <Button

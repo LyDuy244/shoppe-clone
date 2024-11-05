@@ -17,7 +17,7 @@ export class Http {
       timeout: 10000,
       headers: {
         "Content-Type": "application/json",
-        'expire-access-token': 1, // 1 ngày
+        'expire-access-token': 60 * 60 * 24, // 1 ngày
         'expire-refresh-token': 60 * 60 * 24 * 160 // 160 ngày
       }
     })
@@ -97,7 +97,7 @@ export class Http {
       }
     )
   }
-  private handleRefreshToken() {
+  private async handleRefreshToken() {
     return this.instance
       .post<RefreshTokenResponse>(URL_REFRESH_TOKEN, {
         refresh_token: this.refreshToken

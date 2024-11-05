@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { locales } from 'src/i18n/i18n'
 
 export default function NavHeader() {
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation(['header'])
   const currentLanguage = locales[i18n.language as keyof typeof locales]
 
   const queryClient = useQueryClient()
@@ -40,10 +40,10 @@ export default function NavHeader() {
           <div className='bg-white relative shadow-md rounded-sm border-t-white border-solid border border-gray-200'>
             <div className='flex flex-col py-2 px-3'>
               <button className='text-left py-3 px-4 pr-28 hover:text-orange' onClick={() => changeLanguage('vi')}>
-                Tiếng Việt
+                {t('language.vn')}
               </button>
               <button className='text-left py-3 px-4 pr-28 hover:text-orange mt-2' onClick={() => changeLanguage('en')}>
-                Tiếng Anh
+                {t('language.en')}
               </button>
             </div>
           </div>
@@ -84,16 +84,19 @@ export default function NavHeader() {
                 to={path.profile}
                 className='block py-2 px-3 hover:bg-slate-100 bg-white text-cyan-500 w-full text-left'
               >
-                Tài khoản của tôi
+                {t('account.my account')}
               </Link>
-              <Link to={'/'} className='block py-2 px-3 hover:bg-slate-100 bg-white text-cyan-500 w-full text-left'>
-                Đơn mua
+              <Link
+                to={path.historyPurchase}
+                className='block py-2 px-3 hover:bg-slate-100 bg-white text-cyan-500 w-full text-left'
+              >
+                {t('account.my purchase')}
               </Link>
               <button
                 onClick={handleLogout}
                 className='block py-2 px-3 hover:bg-slate-100 bg-white text-cyan-500 w-full text-left'
               >
-                Đăng xuất
+                {t('account.log out')}
               </button>
             </div>
           }

@@ -1,0 +1,17 @@
+{
+  "language": {
+    "vn": "Tiếng Việt",
+    "en": "Tiếng Anh"
+  },
+  "account": {
+    "my account": "Tài khoản của tôi",
+    "my purchase": "Đơn hàng của tôi",
+    "log out": "Đăng xuất"
+  },
+  "cart header": {
+    "no products yet": "Chưa có sản phẩm",
+    "recently added products": "Sản phẩm mới thêm",
+    "view my shopping cart": "Xem giỏ hàng",
+    "add to cart": "Thêm vào giỏ hàng"
+  }
+}

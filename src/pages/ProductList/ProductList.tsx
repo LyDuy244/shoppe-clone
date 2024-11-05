@@ -6,6 +6,7 @@ import Paginate from 'src/components/Paginate'
 import useQueryConfigs from 'src/hooks/useQueryConfigs'
 import AsideFilter from 'src/pages/ProductList/components/AsideFilter'
 import Product from 'src/pages/ProductList/components/Product/Product'
+import SkeletonProductList from 'src/pages/ProductList/components/SkeletonProductList'
 import SortProductList from 'src/pages/ProductList/components/SortProductList'
 import { ProductListConfig } from 'src/types/product.type'
 
@@ -29,11 +30,12 @@ const ProductList = () => {
         <meta name='description' content='Trang danh sách sản phẩm của dự án shoppe clone' />
       </Helmet>
       <div className='container'>
-        {productData && (
-          <div className='grid grid-cols-12 gap-6'>
-            <div className='col-span-2'>
-              <AsideFilter categories={categoryData?.data.data || []} queryConfig={queryConfig} />
-            </div>
+        <div className='grid grid-cols-12 gap-6'>
+          <div className='col-span-2'>
+            <AsideFilter categories={categoryData?.data.data || []} queryConfig={queryConfig} />
+          </div>
+          {!productData && <SkeletonProductList></SkeletonProductList>}
+          {productData && (
             <div className='col-span-10'>
               <SortProductList
                 queryConfig={queryConfig}
@@ -48,8 +50,8 @@ const ProductList = () => {
               </div>
               <Paginate queryConfig={queryConfig} pageSize={productData.data.data.pagination.page_size} />
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   )

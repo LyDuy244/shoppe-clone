@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { createSearchParams, Link } from 'react-router-dom'
 import purchasesApi from 'src/api/purchase.api'
 import path from 'src/constants/path'
@@ -8,31 +10,8 @@ import useQueryParams from 'src/hooks/useQueryParams'
 import { PurchaseListStatus } from 'src/types/purchase.type'
 import { formatCurrency, generateNameId } from 'src/utils/utils'
 
-const purchaseTabs = [
-  { status: purchasesStatus.all, name: 'Tất cả' },
-  {
-    status: purchasesStatus.waitForConfirmation,
-    name: 'Chờ xác nhận'
-  },
-  {
-    status: purchasesStatus.waiForGetting,
-    name: 'Chờ lấy hàng'
-  },
-  {
-    status: purchasesStatus.inProgress,
-    name: 'Đang giao'
-  },
-  {
-    status: purchasesStatus.delivered,
-    name: 'Đã giao'
-  },
-  {
-    status: purchasesStatus.cancelled,
-    name: 'Đã hủy'
-  }
-]
-
 export default function HistoryPurchase() {
+  const { t } = useTranslation('profile')
   const queryParams: { status?: string } = useQueryParams()
   const status: number = Number(queryParams.status) || purchasesStatus.all
   const { data: purchasesInCartData } = useQuery({
@@ -41,6 +20,33 @@ export default function HistoryPurchase() {
   })
   const purchasesInCart = purchasesInCartData?.data.data
 
+  const purchaseTabs = useMemo(
+    () => [
+      { status: purchasesStatus.all, name: t('purchase.all') },
+      {
+        status: purchasesStatus.waitForConfirmation,
+        name: t('purchase.to pay')
+      },
+      {
+        status: purchasesStatus.waiForGetting,
+        name: t('purchase.to receive')
+      },
+      {
+        status: purchasesStatus.inProgress,
+        name: t('purchase.to receive')
+      },
+      {
+        status: purchasesStatus.delivered,
+        name: t('purchase.completed')
+      },
+      {
+        status: purchasesStatus.cancelled,
+        name: t('purchase.cancelled')
+      }
+    ],
+    [t]
+  )
+
   return (
     <div>
       <div className='overflow-x-auto'>
@@ -48,6 +54,7 @@ export default function HistoryPurchase() {
           <div className='sticky top-0 flex rounded-t-sm shadow-sm'>
             {purchaseTabs.map((purchase) => (
               <Link
+                key={purchase.name}
                 to={{
                   pathname: path.historyPurchase,
                   search: createSearchParams({
@@ -93,7 +100,7 @@ export default function HistoryPurchase() {
                 </Link>
                 <div className='flex justify-end'>
                   <div>
-                    <span>Tổng giá tiền</span>
+                    <span>{t("purchase.order total")}:</span>
                     <span className='ml-4 text-xl text-orange'>
                       ₫{formatCurrency(purchase.price * purchase.buy_count)}
                     </span>

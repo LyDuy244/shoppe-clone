@@ -1,0 +1,39 @@
+{
+  "profile": {
+    "edit profile": "Edit Profile",
+    "my profile": "My Profile",
+    "description": "Manage and protect your account",
+    "form": {
+      "name": "Name",
+      "phone number": "Phone Number",
+      "address": "Address",
+      "birth day": "Birthday",
+      "image": {
+        "select image": "Select Image",
+        "file size": "File size: maximum 1 MB",
+        "file extension": "File extension: .JPEG, .PNG"
+      },
+      "save": "Save"
+    }
+  },
+  "change password": {
+    "title": "Change password",
+    "old password": "Old Password",
+    "new password": "New Password",
+    "confirm password": "Confirm Password"
+  },
+  "layout": {
+    "profile": "Profile",
+    "my purchase": "My Purchase",
+    "change password": "Change Password"
+  },
+  "purchase": {
+    "all": "All",
+    "to pay": "To Pay",
+    "to ship": "To Ship",
+    "to receive": "To Receive",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "order total": "Order total"
+  }
+}

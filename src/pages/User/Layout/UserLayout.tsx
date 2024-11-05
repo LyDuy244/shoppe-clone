@@ -1,12 +1,14 @@
 import { Helmet } from 'react-helmet-async'
+import { useTranslation } from 'react-i18next'
 import { Outlet } from 'react-router-dom'
 import UserSideNav from 'src/pages/User/components/UserSideNav'
 
 export default function UserLayout() {
+  const {t} = useTranslation("profile")
   return (
     <div className='bg-neutral-100 py-16 text-sm text-gray-600'>
       <Helmet>
-        <title>Hồ sơ cá nhân | Shoppe Clone</title>
+        <title>{t("profile.my profile")} | Shoppe Clone</title>
         <meta name='description' content='Trang hồ sơ cá nhân của dự án shoppe clone' />
       </Helmet>
       <div className='container'>

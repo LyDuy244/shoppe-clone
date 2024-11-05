@@ -2,7 +2,6 @@ import classNames from 'classnames'
 import { Controller, Resolver, useForm } from 'react-hook-form'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
-import InputNumber from 'src/components/InputNumber'
 import path from 'src/constants/path'
 import { Category } from 'src/types/category.type'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -13,6 +12,8 @@ import RatingStart from 'src/pages/ProductList/components/RatingStart'
 import { QueryConfig } from 'src/hooks/useQueryConfigs'
 import InputV2 from 'src/components/InputV2'
 import { useTranslation } from 'react-i18next'
+import Skeleton from 'src/components/Skeleton'
+import InputNumber from 'src/components/InputNumber'
 
 interface Props {
   categories: Category[]
@@ -57,7 +58,8 @@ export default function AsideFilter({ categories, queryConfig }: Props) {
     control,
     handleSubmit,
     trigger,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm<FormData>({
     defaultValues: {
       price_max: '',
@@ -79,7 +81,12 @@ export default function AsideFilter({ categories, queryConfig }: Props) {
       pathname: path.home,
       search: createSearchParams(omit(queryConfig, ['price_min', 'price_max', 'category', 'rating_filter'])).toString()
     })
+    reset({
+      price_max: '',
+      price_min: ''
+    })
   }
+
   return (
     <div className='py-4'>
       <Link
@@ -105,30 +112,36 @@ export default function AsideFilter({ categories, queryConfig }: Props) {
       </Link>
       <div className='bg-gray-300 h-[1px] my-4'></div>
       <ul>
-        {categories.map((categoryItem) => {
-          const isActive = category === categoryItem._id
+        {categories.length > 0
+          ? categories.map((categoryItem) => {
+              const isActive = category === categoryItem._id
 
-          return (
-            <li className='py-2 pl-2' key={categoryItem._id}>
-              <Link
-                to={{
-                  pathname: path.home,
-                  search: createSearchParams({ ...queryConfig, category: categoryItem._id }).toString()
-                }}
-                className={classNames('relative px-2 ', {
-                  'text-orange font-semibold': isActive
-                })}
-              >
-                {isActive && (
-                  <svg viewBox='0 0 4 7' className='fill-orange h-2 w-2 absolute top-1 left-[-10px]'>
-                    <polygon points='4 3.5 0 0 0 7'></polygon>
-                  </svg>
-                )}
-                {categoryItem.name}
-              </Link>
-            </li>
-          )
-        })}
+              return (
+                <li className='py-2 pl-2' key={categoryItem._id}>
+                  <Link
+                    to={{
+                      pathname: path.home,
+                      search: createSearchParams({ ...queryConfig, category: categoryItem._id }).toString()
+                    }}
+                    className={classNames('relative px-2 ', {
+                      'text-orange font-semibold': isActive
+                    })}
+                  >
+                    {isActive && (
+                      <svg viewBox='0 0 4 7' className='fill-orange h-2 w-2 absolute top-1 left-[-10px]'>
+                        <polygon points='4 3.5 0 0 0 7'></polygon>
+                      </svg>
+                    )}
+                    {categoryItem.name}
+                  </Link>
+                </li>
+              )
+            })
+          : Array(3)
+              .fill(0)
+              .map((_, index) => (
+                <Skeleton key={index} height='20px' width='80%' className='bg-white mt-3 rounded-lg'></Skeleton>
+              ))}
       </ul>
       <Link to={path.home} className='flex items-center font-bold mt-4 uppercase'>
         <svg
@@ -152,76 +165,68 @@ export default function AsideFilter({ categories, queryConfig }: Props) {
       </Link>
       <div className='bg-gray-300 h-[1px] my-4'></div>
       <div className='my-5'>
-        <div>Khoảng giá</div>
+        <div> {t('aside filter.price range')}</div>
         <form className='mt-2' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex items-start'>
-            <InputV2
+            <Controller
               control={control}
               name='price_min'
-              type='number'
-              className='grow mt-2'
-              classNameInput='p-1 w-full outline-none border border-solid border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
-              placeholder='TỪ'
-              classNameError='hidden'
-              onChange={() => {
-                trigger('price_max')
+              render={({ field }) => {
+                return (
+                  <InputNumber
+                    type='text'
+                    className='grow mt-2'
+                    classNameInput='p-1 w-full outline-none border border-solid border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
+                    placeholder={`₫ ${t('aside filter.price min')}`}
+                    classNameError='hidden'
+                    {...field}
+                    onChange={(event) => {
+                      field.onChange(event)
+                      trigger('price_max')
+                    }}
+                  />
+                )
               }}
-            ></InputV2>
-            {/* <Controller
-              control={control}
-              name='price_min'
-              render={({ field }) => (
-                <InputNumber
-                  type='text'
-                  className='grow mt-2'
-                  classNameInput='p-1 w-full outline-none border border-solid border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
-                  placeholder='TỪ'
-                  classNameError='hidden'
-                  {...field}
-                  onChange={(e) => {
-                    field.onChange(e)
-                    trigger('price_max')
-                  }}
-                ></InputNumber>
-              )}
-            /> */}
+            ></Controller>
             <div className='mx-2 mt-3 shrink-0'>-</div>
             <Controller
               control={control}
               name='price_max'
-              render={({ field }) => (
-                <InputNumber
-                  type='text'
-                  className='grow mt-2'
-                  classNameInput='p-1 w-full outline-none border border-solid border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
-                  placeholder='ĐẾN'
-                  classNameError='hidden'
-                  {...field}
-                  onChange={(e) => {
-                    field.onChange(e)
-                    trigger('price_min')
-                  }}
-                ></InputNumber>
-              )}
-            />
+              render={({ field }) => {
+                return (
+                  <InputNumber
+                    type='text'
+                    className='grow mt-2'
+                    classNameInput='p-1 w-full outline-none border border-solid border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
+                    placeholder={`₫ ${t('aside filter.price max')}`}
+                    classNameError='hidden'
+                    {...field}
+                    onChange={(event) => {
+                      field.onChange(event)
+                      trigger('price_min')
+                    }}
+                  />
+                )
+              }}
+            ></Controller>
           </div>
           <div className='mt-1 text-red-600 min-h-[1.25rem] text-sm text-center'>
             {errors.price_min?.message || errors.price_max?.message}
           </div>
           <Button className='w-full p-2 uppercase bg-orange text-white text-sm hover:bg-orange/80 flex justify-center items-center'>
-            Áp dụng
+            {t('aside filter.apply')}
           </Button>
         </form>
       </div>
       <div className='bg-gray-300 h-[1px] my-4'></div>
-      <div className='text-sm'>Đánh Giá</div>
+      <div className='text-sm'>{t('aside filter.rating')}</div>
       <RatingStart queryConfig={queryConfig}></RatingStart>
       <div className='bg-gray-300 h-[1px] my-4'></div>
       <Button
         className='w-full p-2 uppercase bg-orange text-white text-sm hover:bg-orange/80 flex justify-center items-center'
         onClick={handleRemoveAll}
       >
-        Xóa tất cả
+        {t('aside filter.clear all')}
       </Button>
     </div>
   )

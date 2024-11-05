@@ -1,4 +1,5 @@
 import React, { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import config from 'src/constants/config'
 
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export default function InputFile({ onChange }: Props) {
+  const {t} = useTranslation("profile")
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleUpload = () => {
@@ -44,7 +46,7 @@ export default function InputFile({ onChange }: Props) {
         type='button'
         onClick={handleUpload}
       >
-        Chọn ảnh
+        {t('profile.form.image.select image')}
       </button>
     </>
   )

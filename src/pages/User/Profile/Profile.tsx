@@ -15,6 +15,8 @@ import { setProfileToLocalStorage } from 'src/utils/auth'
 import { getAvatarUrl, isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ErrorResponseApi } from 'src/types/utils.type'
 import InputFile from 'src/components/InputFile'
+import { useTranslation } from 'react-i18next'
+import { t } from 'i18next'
 
 export const ProfileSchema = yup
   .object({
@@ -51,6 +53,7 @@ type FormDataError = Omit<FormData, 'date_of_birth'> & {
 }
 
 export default function Profile() {
+  const { t } = useTranslation(['profile'])
   const method = useForm<FormData>({
     defaultValues: {
       name: '',
@@ -138,8 +141,8 @@ export default function Profile() {
   return (
     <div className='rounded-sm bg-white px-2 md:px-7 pb-20 shadow-sm'>
       <div className='border-b-gray-200 py-6 border-solid border-b'>
-        <h1 className='text-lg font-medium capitalize text-gray-900'>Hồ sơ của tôi</h1>
-        <div className='mt-1 text-sm text-gray-700'>Quản lý thông tin hồ sơ để bảo mật tài khoản</div>
+        <h1 className='text-lg font-medium capitalize text-gray-900'>{t('profile.my profile')}</h1>
+        <div className='mt-1 text-sm text-gray-700'>{t('profile.description')}</div>
         <FormProvider {...method}>
           <form className='mt-8 flex flex-col-reverse md:flex-row md:items-start' onSubmit={handleSubmit(onSubmit)}>
             <div className='mt-6 flex-grow md:pr-12 md:mt-0'>
@@ -151,14 +154,14 @@ export default function Profile() {
               </div>
               <Info></Info>
               <div className='mt-2 flex flex-wrap  flex-col sm:flex-row'>
-                <div className='sm:w-[20%] truncate pt-3 sm:text-right capitalize'>Địa chỉ</div>
+                <div className='sm:w-[20%] truncate pt-3 sm:text-right capitalize'>{t('profile.form.address')}</div>
                 <div className='sm:w-[80%] sm:pl-5'>
                   <Input
                     classNameInput='px-3 py-2 w-full outline-none border border-solid border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                     register={register}
                     name='address'
                     errorMessage={errors.address?.message}
-                    placeholder='Địa chỉ'
+                    placeholder={t('profile.form.address')}
                   />
                 </div>
               </div>
@@ -180,7 +183,7 @@ export default function Profile() {
                     type='submit'
                     className='flex items-center h-9 bg-orange px-5 text-center text-sm text-white hover:bg-orange/80'
                   >
-                    Lưu
+                    {t('profile.form.save')}
                   </Button>
                 </div>
               </div>
@@ -198,8 +201,8 @@ export default function Profile() {
                 <InputFile onChange={handleChangeFile}></InputFile>
 
                 <div className='mt-3 text-gray-400'>
-                  <div>Dụng lượng file tối đa 1 MB</div>
-                  <div>Định dạng:.JPEG, .PNG</div>
+                  <div>{t('profile.form.image.file size')}</div>
+                  <div>{t('profile.form.image.file extension')}</div>
                 </div>
               </div>
             </div>
@@ -219,7 +222,7 @@ function Info() {
   return (
     <>
       <div className='mt-2 flex flex-wrap  flex-col sm:flex-row'>
-        <div className='sm:w-[20%] truncate pt-3 sm:text-right capitalize'>Tên</div>
+        <div className='sm:w-[20%] truncate pt-3 sm:text-right capitalize'>{t('profile:profile.form.name')}</div>
         <div className='sm:w-[80%] sm:pl-5'>
           <Input
             classNameInput='px-3 py-2 w-full outline-none border border-solid border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
@@ -231,7 +234,9 @@ function Info() {
         </div>
       </div>
       <div className='mt-2 flex flex-wrap  flex-col sm:flex-row'>
-        <div className='sm:w-[20%] truncate pt-3 sm:text-right capitalize'>Số điện thoại</div>
+        <div className='sm:w-[20%] truncate pt-3 sm:text-right capitalize'>
+          {t('profile:profile.form.phone number')}
+        </div>
         <div className='sm:w-[80%] sm:pl-5'>
           <Controller
             name='phone'
@@ -240,7 +245,7 @@ function Info() {
               <InputNumber
                 classNameInput='px-3 py-2 w-full outline-none border border-solid border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                 errorMessage={errors.phone?.message}
-                placeholder='Số điện thoại'
+                placeholder={t('profile:profile.form.phone number')}
                 {...field}
                 onChange={field.onChange}
               />

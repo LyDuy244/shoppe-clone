@@ -7,11 +7,11 @@ import { AppContext } from 'src/context/app.context'
 import path from 'src/constants/path'
 import CartLayout from 'src/layouts/CartLayout'
 import UserLayout from 'src/pages/User/Layout'
+import ProductList from 'src/pages/ProductList'
+import ProductDetail from 'src/pages/ProductDetail'
 
 const Login = lazy(() => import('./pages/Login'))
-const ProductList = lazy(() => import('./pages/ProductList'))
 const Register = lazy(() => import('./pages/Register'))
-const ProductDetail = lazy(() => import('./pages/ProductDetail'))
 const Cart = lazy(() => import('./pages/Cart'))
 const ChangePassword = lazy(() => import('./pages/User/ChangePassword'))
 const HistoryPurchase = lazy(() => import('./pages/User/HistoryPurchase'))
@@ -34,9 +34,7 @@ export default function useRouteElement() {
       index: true,
       element: (
         <MainLayout>
-          <Suspense>
-            <ProductList />
-          </Suspense>
+          <ProductList />
         </MainLayout>
       )
     },

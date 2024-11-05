@@ -9,7 +9,7 @@ export default function Button(props: ButtonProps) {
   return (
     <button className={newClassname} disabled={disabled} {...rest}>
       {isLoading ? (
-        <div role='status' className='flex justify-center'>
+        <div role='status' className='flex justify-center items-center'>
           <svg
             aria-hidden='true'
             className='w-6 h-6 text-gray-200 animate-spin fill-white'
@@ -26,7 +26,7 @@ export default function Button(props: ButtonProps) {
               fill='currentFill'
             />
           </svg>
-          <span className='sr-only'>Loading...</span>
+          <span className='ml-2'>{children}</span>
         </div>
       ) : (
         <span>{children}</span>

@@ -98,6 +98,8 @@ const Register = () => {
               ></Input>
               <Input
                 type='password'
+                className='relative'
+                classNameEye='size-5 cursor-pointer absolute top-[12px] right-[8px]'
                 register={register}
                 name='password'
                 errorMessage={errors?.password?.message}
@@ -105,6 +107,8 @@ const Register = () => {
               ></Input>
               <Input
                 type='password'
+                className='relative'
+                classNameEye='size-5 cursor-pointer absolute top-[12px] right-[8px]'
                 register={register}
                 name='confirm_password'
                 errorMessage={errors?.confirm_password?.message}

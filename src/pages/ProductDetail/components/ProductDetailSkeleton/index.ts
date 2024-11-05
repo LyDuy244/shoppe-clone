@@ -1,0 +1,3 @@
+import ProductDetailSkeleton from "src/pages/ProductDetail/components/ProductDetailSkeleton/ProductDetailSkeleton";
+
+export default ProductDetailSkeleton

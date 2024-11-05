@@ -1,0 +1,15 @@
+{
+  "header": "Giỏ hàng",
+  "product": "Sản phẩm",
+  "unit price": "Đơn giá",
+  "quantity": "Số lượng",
+  "total price": "Số tiền",
+  "actions": "Thao tác",
+  "delete": "Xóa",
+  "select all": "Chọn tất cả",
+  "total": "Tổng thanh toán",
+  "saved": "Tiết kiệm",
+  "check out": "Mua hàng",
+  "empty cart": "Giỏ hàng của bạn còn trống",
+  "buy now": "Mua ngay"
+}

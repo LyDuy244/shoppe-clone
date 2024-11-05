@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import path from 'src/constants/path'
 import { QueryConfig } from 'src/hooks/useQueryConfigs'
@@ -6,6 +7,7 @@ interface Props {
 }
 
 export default function RatingStart({ queryConfig }: Props) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const handleFilterStart = (ratingFilter: number) => {
     navigate({
@@ -76,7 +78,7 @@ export default function RatingStart({ queryConfig }: Props) {
                     )
                   })}
 
-                {index !== 0 && <span className='ml-2'>Trở lên</span>}
+                {index !== 0 && <span className='ml-2'>{t("rating start.or more")}</span>}
               </div>
             </li>
           ))}
