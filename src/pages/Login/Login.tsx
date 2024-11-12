@@ -39,7 +39,11 @@ const Login = () => {
     formState: { errors }
   } = useForm<FormData>({
     mode: 'onChange',
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
+    defaultValues: {
+      email: import.meta.env.VITE_EMAIL,
+      password: import.meta.env.VITE_PASSWORD
+    }
   })
   const loginMutation = useMutation({
     mutationFn: (body: FormData) => authApi.loginAccount(body)
