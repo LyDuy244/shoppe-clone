@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
 import { convert } from 'html-to-text'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -12,12 +12,14 @@ import ProductRating from 'src/components/ProductRating'
 import QuantityController from 'src/components/QuantityController'
 import path from 'src/constants/path'
 import { purchasesStatus } from 'src/constants/purchase'
+import { AppContext } from 'src/context/app.context'
 import ProductDetailSkeleton from 'src/pages/ProductDetail/components/ProductDetailSkeleton'
 import Product from 'src/pages/ProductList/components/Product'
 import { Product as ProductType } from 'src/types/product.type'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from 'src/utils/utils'
 
 export default function ProductDetail() {
+  const { isAuthenticated } = useContext(AppContext)
   const { t } = useTranslation(['product'])
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -101,28 +103,38 @@ export default function ProductDetail() {
   }
 
   const addToCart = () => {
-    addToCartMutation.mutate(
-      { buy_count: buyCount, product_id: product?._id as string },
-      {
-        onSuccess: (data) => {
-          queryClient.invalidateQueries({ queryKey: ['purchases', { status: purchasesStatus.inCart }] })
-          toast.success(data.data.message)
+    if (isAuthenticated) {
+      addToCartMutation.mutate(
+        { buy_count: buyCount, product_id: product?._id as string },
+        {
+          onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ['purchases', { status: purchasesStatus.inCart }] })
+            toast.success(data.data.message)
+          }
         }
-      }
-    )
+      )
+    } else {
+      toast.warn('Bạn phải đăng nhập trước khi thực hiên hành động này')
+      navigate('/login')
+    }
   }
 
   const buyNow = async () => {
-    try {
-      const res = await addToCartMutation.mutateAsync({ buy_count: buyCount, product_id: product?._id as string })
-      const purchase = res.data.data
-      navigate(path.cart, {
-        state: {
-          purchaseId: purchase._id
-        }
-      })
-    } catch (error) {
-      console.log(error)
+    if (isAuthenticated) {
+      try {
+        const res = await addToCartMutation.mutateAsync({ buy_count: buyCount, product_id: product?._id as string })
+        const purchase = res.data.data
+        navigate(path.cart, {
+          state: {
+            purchaseId: purchase._id
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      toast.warn('Bạn phải đăng nhập trước khi thực hiên hành động này')
+      navigate('/login')
     }
   }
 

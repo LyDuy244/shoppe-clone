@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense, useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 
